@@ -270,6 +270,7 @@ x_pos = 0.1
 x_neg = -0.1
 ch_trans = 1
 ch_nois = 0
+n_det = 0.7
 N = 100000
 DMCVQKD(N)
 
