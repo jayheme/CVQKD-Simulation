@@ -104,9 +104,9 @@ def sifting(alice_vals, bob_vals, measured_vals):
 def noisy_channel(states):
 
     for i in range(len(states)):
-        states[i].x = sqrt(ch_trans)*states[i].x
-        states[i].p = sqrt(ch_trans)*states[i].p
-        states[i].varmat = 0.25*matrix([[ch_trans + (1-ch_trans)*ch_nois,0],[0,ch_trans + (1-ch_trans)*ch_nois]])
+        states[i].x = sqrt(ch_trans*n_det)*states[i].x
+        states[i].p = sqrt(ch_trans*n_det)*states[i].p
+        states[i].varmat = 0.25*matrix([[(ch_trans*n_det) + (1-ch_trans)*ch_nois + (1-n_det)*det_nois,0],[0,(ch_trans*n_det) + (1-ch_trans)*ch_nois + (1-n_det)*det_nois]])
     
     return states
 
@@ -268,9 +268,10 @@ print("start")
 n_sig = 1
 x_pos = 0.1
 x_neg = -0.1
-ch_trans = 1
-ch_nois = 0
+ch_trans = 0.9
+ch_nois = 0.1
 n_det = 0.7
+det_nois = 0.01
 N = 100000
 DMCVQKD(N)
 
