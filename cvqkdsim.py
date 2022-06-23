@@ -44,9 +44,9 @@ def receive(trans_states, bob_vals):
     measured_vals = []
     for i in range(len(bob_vals)):
         if bob_vals[i] == 0:
-            measured_vals.append(random.normal(trans_states[i].x, sqrt(trans_states[i].varmat[0,0])))
+            measured_vals.append(random.normal((trans_states[i].x*cos(err_0)+trans_states[i].p*sin(err_0)), sqrt(trans_states[i].varmat[0,0])))
         else:
-            measured_vals.append(random.normal(trans_states[i].p, sqrt(trans_states[i].varmat[1,1])))
+            measured_vals.append(random.normal((trans_states[i].x*sin(err_90)+trans_states[i].p*cos(err_90)), sqrt(trans_states[i].varmat[1,1])))
 
     return measured_vals
 
@@ -272,6 +272,8 @@ ch_trans = 0.9
 ch_nois = 0.1
 n_det = 0.7
 det_nois = 0.01
+err_0 = 2
+err_90 = 1.5
 N = 100000
 DMCVQKD(N)
 
