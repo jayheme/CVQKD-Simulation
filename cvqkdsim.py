@@ -15,13 +15,6 @@ class coh_state:
         self.varmat = matrix([[1/4,0],[0,1/4]])
         self.avgphotons = pow(abs(x),2) + pow(abs(p),2)
 
-# n_sig = 1
-# x_pos = 0.1
-# x_neg = -0.1
-# ch_trans = 0.9
-# ch_nois = 2
-# N = 100000
-
 plt.rcParams.update({'font.size': 12})
 
 def transmit(alice_vals):
