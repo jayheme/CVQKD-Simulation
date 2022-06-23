@@ -93,7 +93,7 @@ def noisy_channel(states):
     for i in range(len(states)):
         states[i].x = sqrt(ch_trans*n_det)*states[i].x
         states[i].p = sqrt(ch_trans*n_det)*states[i].p
-        states[i].varmat = 0.25*matrix([[(ch_trans*n_det) + (1-ch_trans)*ch_nois + (1-n_det)*det_nois,0],[0,(ch_trans*n_det) + (1-ch_trans)*ch_nois + (1-n_det)*det_nois]])
+        states[i].varmat = 0.25*matrix([[(ch_trans*n_det)*(1+4*prep_err) + (1-ch_trans)*ch_nois + (1-n_det)*det_nois,0],[0,(ch_trans*n_det)*(1+4*prep_err) + (1-ch_trans)*ch_nois + (1-n_det)*det_nois]])
     
     return states
 
@@ -261,6 +261,7 @@ n_det = 1
 det_nois = 0
 err_0 = 0
 err_90 = 0
+prep_err = 0.01
 N = 100000
 DMCVQKD(N)
 
