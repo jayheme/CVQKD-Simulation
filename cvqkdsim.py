@@ -59,7 +59,6 @@ def bob_generate(N):
     
     return rand_array
 
-
 def sifting(alice_vals, bob_vals, measured_vals):
 
     a_key = []
@@ -76,9 +75,7 @@ def sifting(alice_vals, bob_vals, measured_vals):
                 else:
                     a_temp.append(0)
                 b_temp.append(measured_vals[i])
-    print(len(a_temp))
-    print('hello')
-    print(len(b_temp))
+
     for j in range(len(b_temp)):
         if b_temp[j] <= x_neg:
             b_key.append(0)
@@ -88,11 +85,8 @@ def sifting(alice_vals, bob_vals, measured_vals):
             a_key.append(a_temp[j])
     
     count = len(a_temp) - len(a_key)
-    print(len(a_key))
-    print('hello2')
-    print(len(b_key))
+    
     return a_key, b_key, pos, count
-
 
 def noisy_channel(states):
 
@@ -215,7 +209,7 @@ def DMCVQKD(N):
     states = transmit(alice_vals)
     noisy_states = noisy_channel(states)
     measurements = receive(noisy_states, bob_vals)
-    alice_key , bob_key, positions, err_count = sifting(alice_vals, bob_vals, measurements)
+    alice_key , bob_key, positions, deleted_count = sifting(alice_vals, bob_vals, measurements)
     int_err = 0
     for i in range(len(alice_key)):
         if alice_key[i] != bob_key[i]:
@@ -226,13 +220,13 @@ def DMCVQKD(N):
     df2.to_csv("key.csv", index=True)
     print(len(alice_key))
     print(len(bob_key))
-    print(err_count/N)
+    print("deleted measurements=",deleted_count)
+    print("error=",int_err)
     prob_dist(alice_vals,bob_vals,measurements)
     prob_dist_new(alice_vals,bob_vals,measurements)
-    #print("break")
     meas_var(bob_vals,measurements)
     print('break')
-    covariances(alice_vals, bob_vals, measurements)
+    #covariances(alice_vals, bob_vals, measurements)
     # print('done')
     # print(1-(err_count/N))
     # print(int_err/N)
@@ -261,12 +255,12 @@ print("start")
 n_sig = 1
 x_pos = 0.1
 x_neg = -0.1
-ch_trans = 0.9
-ch_nois = 0.1
-n_det = 0.7
-det_nois = 0.01
-err_0 = 2
-err_90 = 1.5
+ch_trans = 1
+ch_nois = 0
+n_det = 1
+det_nois = 0
+err_0 = 0
+err_90 = 0
 N = 100000
 DMCVQKD(N)
 
