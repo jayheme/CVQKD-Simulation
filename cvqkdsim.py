@@ -261,7 +261,7 @@ n_det = 1
 det_nois = 0
 err_0 = 0
 err_90 = 0
-prep_err = 0.01
+prep_err = 0
 N = 100000
 DMCVQKD(N)
 
