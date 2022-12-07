@@ -256,11 +256,11 @@ n_sig = 1
 x_pos = 0.1
 x_neg = -0.1
 ch_trans = 1
-ch_nois = 0
-n_det = 1
-det_nois = 0
-err_0 = 0
-err_90 = 0
+ch_nois = 0.2
+n_det = 0.5
+det_nois = 0.1
+err_0 = 1*(pi/180)               #Should be in radians
+err_90 = 2*(pi/180)              #Should be in radians
 prep_err = 0
 N = 100000
 DMCVQKD(N)
