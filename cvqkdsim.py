@@ -176,31 +176,57 @@ def covariances(alice_vals, bob_vals, measurements):
     a_p = [];
     b_q = [];
     b_p = [];
-    for i in range(len(alice_vals)):
-        if alice_vals[i] == 0:
-            a_q.append(sqrt(n_sig))
-        elif alice_vals[i] == 180:
-            a_q.append(-sqrt(n_sig))
-        elif alice_vals[i] == 90:
-            a_p.append(sqrt(n_sig))
-        else: 
-            a_p.append(-sqrt(n_sig))
-    for i in range(len(bob_vals)):
-        if bob_vals[i] == 0:
-            b_q.append(measurements[i])
-        else:
-            b_p.append(measurements[i])
-    print(mean(a_q))
-    print(var(a_q))
-    print(cov(a_q[0:15000],b_q[0:15000],False))
-    print(cov(a_p[0:15000],b_p[0:15000],False))
-    print(cov(a_q[0:15000],b_p[0:15000],False))
-    print(pow(cov(a_q[0:15000],b_q[0:15000],False)[0,1]/(var(a_q)),2))
+    # for i in range(len(alice_vals)):
+    #     if alice_vals[i] == 0:
+    #         a_q.append(sqrt(n_sig))
+    #     elif alice_vals[i] == 180:
+    #         a_q.append(-sqrt(n_sig))
+    #     elif alice_vals[i] == 90:
+    #         a_p.append(sqrt(n_sig))
+    #     else: 
+    #         a_p.append(-sqrt(n_sig))
+    # for i in range(len(bob_vals)):
+    #     if bob_vals[i] == 0:
+    #         b_q.append(measurements[i])
+    #     else:
+    #         b_p.append(measurements[i])
+    # print(mean(a_q))
+    # print(var(a_q))
+    # print(cov(a_q[0:15000],b_q[0:15000],False))
+    # print(cov(a_p[0:15000],b_p[0:15000],False))
+    # print(cov(a_q[0:15000],b_p[0:15000],False))
+    # print(pow(cov(a_q[0:15000],b_q[0:15000],False)[0,1]/(var(a_q)),2))
+
     # print(len(a_q))
     # print(len(a_p))
     # print(len(b_q))
     # print(len(b_p))
-
+    arrq1 = []
+    arrq2 = []
+    arrp1 = []
+    arrp2 = []
+    for i in range(len(alice_vals)):
+        if abs(alice_vals[i] - bob_vals[i]) == 0 or abs(alice_vals[i] - bob_vals[i]) == 180:
+            if alice_vals[i] == 0 or alice_vals[i] == 180:
+                if alice_vals[i] == 0:
+                    arrq1.append(sqrt(n_sig))
+                else:
+                    arrq1.append(-sqrt(n_sig))
+                arrq2.append(measurements[i])
+            else:
+                if alice_vals[i] == 90:
+                    arrp1.append(sqrt(n_sig))
+                else:
+                    arrp1.append(-sqrt(n_sig))
+                arrp2.append(measurements[i])
+                
+    # print(len(arrq1))
+    # print(len(arrq2))
+    # print(len(arrp1))
+    # print(len(arrp2))
+    print(cov(arrq1,arrq2,False))
+    print(pow(cov(arrq1[0:15000],arrq2[0:15000],False)[0,1]/(var(arrq1)),2))
+    
 
 def DMCVQKD(N):
 
@@ -226,7 +252,7 @@ def DMCVQKD(N):
     prob_dist_new(alice_vals,bob_vals,measurements)
     meas_var(bob_vals,measurements)
     print('break')
-    #covariances(alice_vals, bob_vals, measurements)
+    covariances(alice_vals, bob_vals, measurements)
     # print('done')
     # print(1-(err_count/N))
     # print(int_err/N)
@@ -255,12 +281,12 @@ print("start")
 n_sig = 1
 x_pos = 0.1
 x_neg = -0.1
-ch_trans = 1
-ch_nois = 0.2
-n_det = 0.5
-det_nois = 0.1
-err_0 = 1*(pi/180)               #Should be in radians
-err_90 = 2*(pi/180)              #Should be in radians
+ch_trans = 0.8
+ch_nois = 0
+n_det = 1
+det_nois = 0
+err_0 = 0               #Should be in radians
+err_90 = 0              #Should be in radians
 prep_err = 0
 N = 100000
 DMCVQKD(N)
