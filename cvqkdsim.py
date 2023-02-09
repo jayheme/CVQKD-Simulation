@@ -75,16 +75,19 @@ def sifting(alice_vals, bob_vals, measured_vals):
                 else:
                     a_temp.append(0)
                 b_temp.append(measured_vals[i])
-
-    for j in range(len(b_temp)):
-        if b_temp[j] <= x_neg:
-            b_key.append(0)
-            a_key.append(a_temp[j])
-        if b_temp[j] >= x_pos:
-            b_key.append(1)
-            a_key.append(a_temp[j])
+                
     
-    count = len(a_temp) - len(a_key)
+    for i in range(len(b_temp)):
+        if b_temp[i] <= x_neg:
+            b_key.append(0)
+            a_key.append(a_temp[i])
+        if b_temp[i] >= x_pos:
+            b_key.append(1)
+            a_key.append(a_temp[i])
+        if b_temp[i] >= x_pos and b_temp[i] <= x_neg:
+            count = count+1
+            
+    # count = len(a_temp) - len(a_key)
     
     return a_key, b_key, pos, count
 
@@ -240,29 +243,22 @@ def DMCVQKD(N):
     for i in range(len(alice_key)):
         if alice_key[i] != bob_key[i]:
             int_err = int_err+1
-    df = pd.DataFrame({"alice phase" : alice_vals, "bob phase" : bob_vals, "measurements" : measurements})
-    df.to_csv("output.csv", index=True)
-    df2 = pd.DataFrame({ "alice key" : alice_key, "bob key" : bob_key})
-    df2.to_csv("key.csv", index=True)
-    print(len(alice_key))
-    print(len(bob_key))
-    print("deleted measurements=",deleted_count)
-    print("error=",int_err)
-    prob_dist(alice_vals,bob_vals,measurements)
-    prob_dist_new(alice_vals,bob_vals,measurements)
-    meas_var(bob_vals,measurements)
-    print('break')
-    covariances(alice_vals, bob_vals, measurements)
-    # print('done')
-    # print(1-(err_count/N))
-    # print(int_err/N)
-    #print(alice_vals)
-    #print(bob_vals)
-    #print(measurements)
-    #print(positions)
-    #print(alice_key)
-    #print(bob_key)
-    #return 1-(err_count/N), int_err/N
+
+    # df = pd.DataFrame({"alice phase" : alice_vals, "bob phase" : bob_vals, "measurements" : measurements})
+    # df.to_csv("output.csv", index=True)
+    # df2 = pd.DataFrame({ "alice key" : alice_key, "bob key" : bob_key})
+    # df2.to_csv("key.csv", index=True)
+    # print(len(alice_key))
+    # print(len(bob_key))
+    # print("deleted measurements=",deleted_count)
+    # print("error=",int_err)
+    # prob_dist(alice_vals,bob_vals,measurements)
+    # prob_dist_new(alice_vals,bob_vals,measurements)
+    # meas_var(bob_vals,measurements)
+    # print('break')
+    # covariances(alice_vals, bob_vals, measurements)
+
+    return 1-(deleted_count)/(len(positions)), (int_err)/len(positions)
             
 
 #a_vals=[0,90,180,270]
@@ -278,18 +274,41 @@ def DMCVQKD(N):
 #print(m_vals)
 
 print("start")
-n_sig = 1
-x_pos = 0.1
-x_neg = -0.1
-ch_trans = 0.8
+# n_sig = 1
+# x_pos = 0.1
+# x_neg = -0.1
+ch_trans = 1
 ch_nois = 0
 n_det = 1
 det_nois = 0
 err_0 = 0               #Should be in radians
 err_90 = 0              #Should be in radians
 prep_err = 0
-N = 100000
-DMCVQKD(N)
+N = 25000
+# DMCVQKD(N)
+
+
+# N_sig = [0.1, 0.2, 0.5, 1, 2, 10, 100, 1000]
+N_sig = [0.1,0.2,1,2,10]
+plt.yscale("log")
+for n in N_sig:
+    n_sig = n
+    x_thresh = arange(0,5,0.1)
+    x_posarr = x_thresh
+    x_negarr = -x_thresh
+    post_eff = []
+    post_err = []
+    for j in range(len(x_thresh)):
+        x_pos = x_posarr[j]
+        x_neg = x_negarr[j]
+        eff, err = DMCVQKD(N)
+        post_eff.append(eff)
+        post_err.append(err)
+        
+        
+    plt.scatter(x_thresh,post_eff)
+
+plt.show()
 
 #error part
 # N_sig = [0.1, 0.2, 0.5, 1, 2, 10, 100, 1000]
