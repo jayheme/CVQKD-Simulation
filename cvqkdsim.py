@@ -75,7 +75,6 @@ def sifting(alice_vals, bob_vals, measured_vals):
                 else:
                     a_temp.append(0)
                 b_temp.append(measured_vals[i])
-                
     
     for i in range(len(b_temp)):
         if b_temp[i] <= x_neg:
@@ -84,7 +83,7 @@ def sifting(alice_vals, bob_vals, measured_vals):
         if b_temp[i] >= x_pos:
             b_key.append(1)
             a_key.append(a_temp[i])
-        if b_temp[i] >= x_pos and b_temp[i] <= x_neg:
+        if b_temp[i] <= x_pos and b_temp[i] >= x_neg:
             count = count+1
             
     # count = len(a_temp) - len(a_key)
@@ -284,16 +283,18 @@ det_nois = 0
 err_0 = 0               #Should be in radians
 err_90 = 0              #Should be in radians
 prep_err = 0
-N = 25000
+N = 100000
 # DMCVQKD(N)
 
 
-# N_sig = [0.1, 0.2, 0.5, 1, 2, 10, 100, 1000]
-N_sig = [0.1,0.2,1,2,10]
+N_sig = [0.1, 0.2, 0.5, 1, 2, 10, 100, 1000]
+
+# N_sig = [0.1,0.2,1,10,100]
+fig, ax = plt.subplots(2,1)
 plt.yscale("log")
 for n in N_sig:
     n_sig = n
-    x_thresh = arange(0,5,0.1)
+    x_thresh = arange(0,10,0.025)
     x_posarr = x_thresh
     x_negarr = -x_thresh
     post_eff = []
@@ -305,9 +306,10 @@ for n in N_sig:
         post_eff.append(eff)
         post_err.append(err)
         
-        
-    plt.scatter(x_thresh,post_eff)
-
+    ax[0].scatter(x_thresh,post_eff, label=fr"$N_{{sig}}$ = {n}")
+    ax[1].scatter(x_thresh,post_err,label=fr"$N_{{sig}}$ = {n}")
+ax[0].set_yscale("log")
+ax[1].set_yscale("log")
 plt.show()
 
 #error part
